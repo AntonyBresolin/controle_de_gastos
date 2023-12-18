@@ -9,6 +9,41 @@ const List<String> list = <String>[
   'Four'
 ];
 
+List<Gasto> gastos = <Gasto>[
+  Gasto(
+      id: 1,
+      name: 'Despesa',
+      value: 100.0,
+      type: 'Despesa',
+      date: '01/01/2021'),
+  Gasto(
+      id: 2,
+      name: 'Salario',
+      value: 100.0,
+      type: 'Salario',
+      date: '01/01/2021'),
+  Gasto(id: 3, name: 'Lucro', value: 100.0, type: 'Lucro', date: '01/01/2021'),
+  Gasto(
+      id: 4,
+      name: 'Despesa',
+      value: 100.0,
+      type: 'Despesa',
+      date: '01/01/2021'),
+  Gasto(
+      id: 5,
+      name: 'Salario',
+      value: 100.0,
+      type: 'Salario',
+      date: '01/01/2021'),
+  Gasto(id: 6, name: 'Lucro', value: 100.0, type: 'Lucro', date: '01/01/2021'),
+  Gasto(
+      id: 7,
+      name: 'Despesa',
+      value: 100.0,
+      type: 'Despesa',
+      date: '01/01/2021'),
+];
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -30,23 +65,31 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        title: Text('Controle de Gastos'),
-        backgroundColor: Color(0xff146073),
+        title: const Text(
+          'Controle de Gastos',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xff146073),
       ),
-      body: Center(
-        child: Text('Side Menu Tutorial'),
+      body: const Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          AddNewSpentButton(),
+          HistoryItem(),
+        ],
       ),
       floatingActionButton: FloatingActionButton.large(
-        onPressed: () {},
-        child: Icon(
-          Icons.add,
-          size: 64,
-          color: Color(0xff146073),
-        ),
-        backgroundColor: Color(0xfff6f6f6),
-      ),
+          onPressed: () {
+            printarLista();
+          },
+          backgroundColor: const Color(0xfff6f6f6),
+          child: const Icon(
+            Icons.add,
+            size: 64,
+            color: Color(0xff146073),
+          )),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff146073),
+        backgroundColor: const Color(0xff146073),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
@@ -89,8 +132,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          SafeArea(
-            child: const DrawerHeader(
+          const SafeArea(
+            child: DrawerHeader(
                 decoration: BoxDecoration(
                     color: Color(0xfff4fef8),
                     image: DecorationImage(
@@ -99,12 +142,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           ListTile(
             selected: _selectedIndex == 1,
-            tileColor: Color(0xff146073),
-            leading: Icon(
+            tileColor: const Color(0xff146073),
+            leading: const Icon(
               Icons.home,
               color: Colors.white,
             ),
-            title: Text(
+            title: const Text(
               "Home",
               style: TextStyle(
                 fontSize: 24,
@@ -119,7 +162,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ListTile(
             selected: _selectedIndex == 2,
             tileColor: Colors.white,
-            leading: Icon(
+            leading: const Icon(
               Icons.add,
               color: Colors.black,
               size: 28,
@@ -144,7 +187,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           ListTile(
             selected: _selectedIndex == 3,
-            leading: Icon(Icons.add_chart, color: Colors.black),
+            leading: const Icon(Icons.add_chart, color: Colors.black),
             title: const Text(
               'Relatórios',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
@@ -161,18 +204,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
 }
 
 class NewItemPage extends StatelessWidget {
+  const NewItemPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Adicionar novo débito"),
-        backgroundColor: Color(0xff146073),
+        title: const Text("Adicionar novo débito"),
+        backgroundColor: const Color(0xff146073),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Center(
               child: Text(
                 "Adicionar\n uma nova entrada",
@@ -193,27 +237,28 @@ class NewItemPage extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0)
-                      ), labelText: 'Insira um valor', ),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      labelText: 'Insira um valor',
+                    ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: DropdownMenuExample(),
               ),
             ],
           ),
-          SliderAmount(),
+          const SliderAmount(),
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
             child: FilledButton(
-                onPressed: () { },
-                child: const Text("Adicionar"),
-                style: ButtonStyle(
+              onPressed: () {},
+              style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
-                  fixedSize: MaterialStateProperty.all(Size.fromWidth(250))
-                ),
+                  fixedSize:
+                      MaterialStateProperty.all(const Size.fromWidth(250))),
+              child: const Text("Adicionar"),
             ),
           )
         ],
@@ -233,18 +278,92 @@ class _SliderAmountState extends State<SliderAmount> {
   double _currentSliderValue = 0;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Slider(
-        value: _currentSliderValue,
-        max: 1000,
-        divisions: 1000,
-        label: _currentSliderValue.round().toString(),
-        onChanged: (double value) {
-          setState(() {
-            _currentSliderValue = value;
-          });
-        },
+      value: _currentSliderValue,
+      max: 1000,
+      divisions: 1000,
+      label: _currentSliderValue.round().toString(),
+      onChanged: (double value) {
+        setState(() {
+          _currentSliderValue = value;
+        });
+      },
     );
   }
 }
 
+class HistoryItem extends StatelessWidget {
+  const HistoryItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return (gastos.isEmpty
+        ? const Padding(
+            padding: EdgeInsets.all(8.0),
+            child:
+                Text("Nenhum gasto adicionado", style: TextStyle(fontSize: 24)),
+          )
+        : const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("Existem coisas adicionadas",
+                style: TextStyle(fontSize: 24)),
+          ));
+  }
+}
+
+class AddNewSpentButton extends StatelessWidget {
+  const AddNewSpentButton({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return (Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.add,
+              size: 64,
+              color: Color(0xff146073),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Adicione um novo gasto",
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+}
+
+class Gasto {
+  int id;
+  String name;
+  double value;
+  String type;
+  String date;
+
+  Gasto(
+      {this.id = 0,
+      this.name = '',
+      this.value = 0.0,
+      this.type = '',
+      this.date = ''});
+}
+
+void printarLista() {
+  print(gastos.isEmpty);
+  for (var gasto in gastos) {
+    print(gasto.name);
+  }
+}
