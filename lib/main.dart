@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:controle_de_gastos/components/DropdownMenuExample.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +17,15 @@ List<Gasto> gastos = <Gasto>[
       name: 'Despesa',
       value: 100.0,
       type: 'Despesa',
-      date: '01/01/2021'),
+      date: '01/01/2021',
+      status: Status.saida),
   Gasto(
       id: 2,
       name: 'Salario',
       value: 100.0,
       type: 'Salario',
-      date: '01/01/2021'),
+      date: '01/01/2021',
+      status: Status.entrada),
   Gasto(id: 3, name: 'Lucro', value: 100.0, type: 'Lucro', date: '01/01/2021'),
   Gasto(
       id: 4,
@@ -181,7 +185,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NewItemPage()),
+                MaterialPageRoute(builder: (context) => const NewItemPage()),
               );
             },
           ),
@@ -252,15 +256,14 @@ class NewItemPage extends StatelessWidget {
           const SliderAmount(),
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
-            child: FilledButton(
+            child: ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
-                  fixedSize:
-                      MaterialStateProperty.all(const Size.fromWidth(250))),
-              child: const Text("Adicionar"),
+                backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
+              ),
+              child: Text("Adicionar"),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -304,10 +307,84 @@ class HistoryItem extends StatelessWidget {
             child:
                 Text("Nenhum gasto adicionado", style: TextStyle(fontSize: 24)),
           )
-        : const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("Existem coisas adicionadas",
-                style: TextStyle(fontSize: 24)),
+        : Expanded(
+            flex: 1,
+            child: ListView.builder(
+              itemCount: gastos.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.grey, width: 0.5)),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: ListTile(
+                                leading:
+                                    const Icon(Icons.align_vertical_center),
+                                title: Text(
+                                  gastos[index].name,
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    return;
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      return;
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "R\$ ${gastos[index].value}",
+                              style: (gastos[index].status == Status.entrada
+                                  ? const TextStyle(color: Colors.blue)
+                                  : const TextStyle(color: Colors.red)),
+                            ),
+                            Text(gastos[index].date),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ));
   }
 }
@@ -318,27 +395,50 @@ class AddNewSpentButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return (Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(color: Colors.grey),
       ),
       child: const Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.add,
-              size: 64,
-              color: Color(0xff146073),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Adicione um novo gasto",
-                style: TextStyle(fontSize: 24),
+          Column(
+            children: [
+              Text(
+                "Semanal",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
+              Text(
+                "R\$ 300",
+                style: TextStyle(color: Colors.green),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              Text(
+                "Mensal",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "R\$ -400",
+                style: TextStyle(color: Colors.red),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              Text(
+                "Anual",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "R\$ -400",
+                style: TextStyle(color: Colors.red),
+              )
+            ],
           ),
         ],
       ),
@@ -346,19 +446,23 @@ class AddNewSpentButton extends StatelessWidget {
   }
 }
 
+enum Status { entrada, saida }
+
 class Gasto {
   int id;
   String name;
   double value;
   String type;
   String date;
+  Status status = Status.saida;
 
   Gasto(
       {this.id = 0,
       this.name = '',
       this.value = 0.0,
       this.type = '',
-      this.date = ''});
+      this.date = '',
+      this.status = Status.saida});
 }
 
 void printarLista() {
