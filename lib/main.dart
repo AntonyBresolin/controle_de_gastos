@@ -1,15 +1,8 @@
-import 'dart:ffi';
-
+import 'package:controle_de_gastos/components/AddNewSpentButton.dart';
+import 'package:controle_de_gastos/components/CustomDrawer.dart';
 import 'package:controle_de_gastos/components/DropdownMenuExample.dart';
+import 'package:controle_de_gastos/pages/NewItemPage.dart';
 import 'package:flutter/material.dart';
-
-const List<String> list = <String>[
-  'Selecione um item',
-  'Despesa',
-  'Salario',
-  'Lucro',
-  'Four'
-];
 
 List<Gasto> gastos = <Gasto>[
   Gasto(
@@ -32,7 +25,8 @@ List<Gasto> gastos = <Gasto>[
       name: 'Despesa',
       value: 100.0,
       type: 'Despesa',
-      date: '01/01/2021'),
+      date: '01/01/2021',
+      status: Status.entrada),
   Gasto(
       id: 5,
       name: 'Salario',
@@ -56,7 +50,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
       home: MyHomePage(),
     );
@@ -69,6 +63,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           'Controle de Gastos',
           style: TextStyle(color: Colors.white),
@@ -93,6 +88,7 @@ class MyHomePage extends StatelessWidget {
             color: Color(0xff146073),
           )),
       bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.grey,
         backgroundColor: const Color(0xff146073),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -105,193 +101,12 @@ class MyHomePage extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.add_chart,
-                color: Colors.white,
               ),
               label: 'Relatórios')
         ],
         selectedItemColor: Colors.white,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-}
-
-class CustomDrawer extends StatefulWidget {
-  @override
-  _CustomDrawerState createState() => _CustomDrawerState();
-}
-
-class _CustomDrawerState extends State<CustomDrawer> {
-  @override
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const SafeArea(
-            child: DrawerHeader(
-                decoration: BoxDecoration(
-                    color: Color(0xfff4fef8),
-                    image: DecorationImage(
-                        image: AssetImage('assets/image/menuImage.png'))),
-                child: Text("")),
-          ),
-          ListTile(
-            selected: _selectedIndex == 1,
-            tileColor: const Color(0xff146073),
-            leading: const Icon(
-              Icons.home,
-              color: Colors.white,
-            ),
-            title: const Text(
-              "Home",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-              ),
-            ),
-            onTap: () {
-              _onItemTapped(1);
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            selected: _selectedIndex == 2,
-            tileColor: Colors.white,
-            leading: const Icon(
-              Icons.add,
-              color: Colors.black,
-              size: 28,
-            ),
-            title: const Text(
-              'Adicionar novo gasto',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-                color: Colors.black,
-              ),
-            ),
-            onTap: () {
-              _onItemTapped(2);
-
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NewItemPage()),
-              );
-            },
-          ),
-          ListTile(
-            selected: _selectedIndex == 3,
-            leading: const Icon(Icons.add_chart, color: Colors.black),
-            title: const Text(
-              'Relatórios',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
-            ),
-            onTap: () {
-              _onItemTapped(3);
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class NewItemPage extends StatelessWidget {
-  const NewItemPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Adicionar novo débito"),
-        backgroundColor: const Color(0xff146073),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Center(
-              child: Text(
-                "Adicionar\n uma nova entrada",
-                style: TextStyle(
-                  fontSize: 32,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      labelText: 'Insira um valor',
-                    ),
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: DropdownMenuExample(),
-              ),
-            ],
-          ),
-          const SliderAmount(),
-          Padding(
-            padding: const EdgeInsets.only(top: 100.0),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
-              ),
-              child: Text("Adicionar"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SliderAmount extends StatefulWidget {
-  const SliderAmount({super.key});
-
-  @override
-  State<SliderAmount> createState() => _SliderAmountState();
-}
-
-class _SliderAmountState extends State<SliderAmount> {
-  double _currentSliderValue = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Slider(
-      value: _currentSliderValue,
-      max: 1000,
-      divisions: 1000,
-      label: _currentSliderValue.round().toString(),
-      onChanged: (double value) {
-        setState(() {
-          _currentSliderValue = value;
-        });
-      },
     );
   }
 }
@@ -312,137 +127,97 @@ class HistoryItem extends StatelessWidget {
             child: ListView.builder(
               itemCount: gastos.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: Colors.grey, width: 0.5)),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: ListTile(
-                                leading:
-                                    const Icon(Icons.align_vertical_center),
-                                title: Text(
-                                  gastos[index].name,
-                                  style: const TextStyle(fontSize: 24),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                return Container(
+                  color: Color.fromARGB(255, 232, 228, 228),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 6.0, right: 10.0, left: 10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: Color.fromARGB(255, 250, 249, 249),
+                        border: const Border(
+                            bottom: BorderSide(color: Colors.grey, width: 0.5)),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    return;
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white),
-                                  child: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                                Expanded(
+                                  flex: 1,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      gastos[index].status == Status.entrada
+                                          ? const Icon(
+                                              Icons.north_east,
+                                              color: Colors.green,
+                                              size: 56.0,
+                                            )
+                                          : const Icon(
+                                              Icons.south_east,
+                                              color: Colors.red,
+                                              size: 56.0,
+                                            ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(gastos[index].type),
+                                              Text(
+                                                gastos[index].name,
+                                                style: const TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                gastos[index].date,
+                                                style: const TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 152, 148, 148)),
+                                              ),
+                                            ]),
+                                      )
+                                    ],
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      return;
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white),
-                                    child: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blueAccent,
-                                    ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    gastos[index].status == Status.entrada
+                                        ? "${gastos[index].value}"
+                                        : "- ${gastos[index].value}",
+                                    style:
+                                        (gastos[index].status == Status.entrada
+                                            ? const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)
+                                            : const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 203, 27, 15),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)),
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "R\$ ${gastos[index].value}",
-                              style: (gastos[index].status == Status.entrada
-                                  ? const TextStyle(color: Colors.blue)
-                                  : const TextStyle(color: Colors.red)),
-                            ),
-                            Text(gastos[index].date),
-                          ],
-                        )
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
               },
             ),
           ));
-  }
-}
-
-class AddNewSpentButton extends StatelessWidget {
-  const AddNewSpentButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return (Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey),
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              Text(
-                "Semanal",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "R\$ 300",
-                style: TextStyle(color: Colors.green),
-              )
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                "Mensal",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "R\$ -400",
-                style: TextStyle(color: Colors.red),
-              )
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                "Anual",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "R\$ -400",
-                style: TextStyle(color: Colors.red),
-              )
-            ],
-          ),
-        ],
-      ),
-    ));
   }
 }
 
@@ -464,6 +239,22 @@ class Gasto {
       this.date = '',
       this.status = Status.saida});
 }
+
+class TypeGasto {
+  int id;
+  String name;
+  String color;
+
+  TypeGasto({this.id = 0, this.name = '', this.color = 'fff'});
+}
+
+const List<String> list = <String>[
+  'Selecione um item',
+  'Despesa',
+  'Salario',
+  'Lucro',
+  'Four'
+];
 
 void printarLista() {
   print(gastos.isEmpty);
