@@ -4,42 +4,84 @@ import 'package:controle_de_gastos/components/DropdownMenuExample.dart';
 import 'package:controle_de_gastos/pages/NewItemPage.dart';
 import 'package:flutter/material.dart';
 
+List<TypeGasto> tiposDeGastos = [
+  TypeGasto(id: 1, name: 'Despesa', color: Colors.red),
+  TypeGasto(id: 2, name: 'Salario', color: Colors.green),
+  TypeGasto(id: 3, name: 'Lucro', color: Colors.blue),
+  TypeGasto(id: 4, name: 'Investimento', color: Colors.orange),
+  TypeGasto(id: 5, name: 'Aluguel', color: Colors.yellow),
+];
 List<Gasto> gastos = <Gasto>[
   Gasto(
       id: 1,
-      name: 'Despesa',
-      value: 100.0,
-      type: 'Despesa',
+      name: 'Mercado',
+      value: 108.0,
+      type: tiposDeGastos[0], // Despesa
       date: '01/01/2021',
       status: Status.saida),
   Gasto(
       id: 2,
-      name: 'Salario',
-      value: 100.0,
-      type: 'Salario',
-      date: '01/01/2021',
+      name: 'Salário',
+      value: 2500.0,
+      type: tiposDeGastos[1],
+      date: '05/01/2021',
       status: Status.entrada),
-  Gasto(id: 3, name: 'Lucro', value: 100.0, type: 'Lucro', date: '01/01/2021'),
+  Gasto(
+      id: 3,
+      name: 'Aluguel',
+      value: 800.0,
+      type: tiposDeGastos[4],
+      date: '10/01/2021',
+      status: Status.saida),
   Gasto(
       id: 4,
-      name: 'Despesa',
-      value: 100.0,
-      type: 'Despesa',
-      date: '01/01/2021',
+      name: 'Venda de Ações',
+      value: 1200.0,
+      type: tiposDeGastos[2],
+      date: '15/01/2021',
       status: Status.entrada),
   Gasto(
       id: 5,
-      name: 'Salario',
-      value: 100.0,
-      type: 'Salario',
-      date: '01/01/2021'),
-  Gasto(id: 6, name: 'Lucro', value: 100.0, type: 'Lucro', date: '01/01/2021'),
+      name: 'Compra de Equipamentos',
+      value: 450.0,
+      type: tiposDeGastos[0],
+      date: '20/01/2021',
+      status: Status.saida),
+  Gasto(
+      id: 6,
+      name: 'Restaurante',
+      value: 120.0,
+      type: tiposDeGastos[0],
+      date: '25/01/2021',
+      status: Status.saida),
   Gasto(
       id: 7,
-      name: 'Despesa',
-      value: 100.0,
-      type: 'Despesa',
-      date: '01/01/2021'),
+      name: 'Investimento em CDB',
+      value: 1000.0,
+      type: tiposDeGastos[3],
+      date: '01/02/2021',
+      status: Status.entrada),
+  Gasto(
+      id: 8,
+      name: 'Conta de Luz',
+      value: 200.0,
+      type: tiposDeGastos[0],
+      date: '05/02/2021',
+      status: Status.saida),
+  Gasto(
+      id: 9,
+      name: 'Salário',
+      value: 2500.0,
+      type: tiposDeGastos[1],
+      date: '05/02/2021',
+      status: Status.entrada),
+  Gasto(
+      id: 10,
+      name: 'Assinatura de Streaming',
+      value: 30.0,
+      type: tiposDeGastos[0],
+      date: '10/02/2021',
+      status: Status.saida),
 ];
 
 void main() => runApp(MyApp());
@@ -137,43 +179,66 @@ class HistoryItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4.0),
                         color: Color.fromARGB(255, 250, 249, 249),
                         border: const Border(
-                            bottom: BorderSide(color: Colors.grey, width: 0.5)),
+                            bottom: BorderSide(color: Colors.grey, width: 0.8)),
                       ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      gastos[index].status == Status.entrada
-                                          ? const Icon(
-                                              Icons.north_east,
-                                              color: Colors.green,
-                                              size: 56.0,
-                                            )
-                                          : const Icon(
-                                              Icons.south_east,
-                                              color: Colors.red,
-                                              size: 56.0,
-                                            ),
-                                      Padding(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    gastos[index].status == Status.entrada
+                                        ? const Icon(
+                                            Icons.north_east,
+                                            color: Colors.green,
+                                            size: 56.0,
+                                          )
+                                        : const Icon(
+                                            Icons.south_east,
+                                            color: Colors.red,
+                                            size: 56.0,
+                                          ),
+                                    Expanded(
+                                      child: Padding(
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(gastos[index].type),
+                                              Text(
+                                                gastos[index].type.name,
+                                                style: TextStyle(
+                                                  shadows: [
+                                                    Shadow(
+                                                      // Simula o preenchimento do texto
+                                                      blurRadius: 3.0,
+                                                      color: gastos[index]
+                                                          .type
+                                                          .color,
+                                                    ),
+                                                  ],
+                                                  foreground: Paint()
+                                                    ..style = PaintingStyle.fill
+                                                    ..filterQuality =
+                                                        FilterQuality.high
+                                                    ..color = Colors.black,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.fade,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                              ),
                                               Text(
                                                 gastos[index].name,
+                                                overflow: TextOverflow.fade,
+                                                maxLines: 1,
+                                                softWrap: false,
                                                 style: const TextStyle(
-                                                    fontSize: 24,
+                                                    fontSize: 20,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
@@ -184,33 +249,29 @@ class HistoryItem extends StatelessWidget {
                                                         255, 152, 148, 148)),
                                               ),
                                             ]),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    gastos[index].status == Status.entrada
-                                        ? "${gastos[index].value}"
-                                        : "- ${gastos[index].value}",
-                                    style:
-                                        (gastos[index].status == Status.entrada
-                                            ? const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)
-                                            : const TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 203, 27, 15),
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                  ),
-                                ),
-                              ],
+                                      ),
+                                    ),
+                                  ]),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                gastos[index].status == Status.entrada
+                                    ? "${gastos[index].value}"
+                                    : "- ${gastos[index].value}",
+                                style: (gastos[index].status == Status.entrada
+                                    ? const TextStyle(
+                                        color: Color.fromARGB(255, 42, 42, 42),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)
+                                    : const TextStyle(
+                                        color: Color.fromARGB(255, 203, 27, 15),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -227,7 +288,7 @@ class Gasto {
   int id;
   String name;
   double value;
-  String type;
+  TypeGasto type;
   String date;
   Status status = Status.saida;
 
@@ -235,7 +296,7 @@ class Gasto {
       {this.id = 0,
       this.name = '',
       this.value = 0.0,
-      this.type = '',
+      required this.type,
       this.date = '',
       this.status = Status.saida});
 }
@@ -243,9 +304,13 @@ class Gasto {
 class TypeGasto {
   int id;
   String name;
-  String color;
+  Color color;
 
-  TypeGasto({this.id = 0, this.name = '', this.color = 'fff'});
+  TypeGasto({this.id = 0, this.name = '', required this.color});
+
+  static TypeGasto defaultGasto() {
+    return TypeGasto(color: Colors.black);
+  }
 }
 
 const List<String> list = <String>[
