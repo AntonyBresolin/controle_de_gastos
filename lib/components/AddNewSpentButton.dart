@@ -6,7 +6,7 @@ class AddNewSpentButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return (Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Color.fromARGB(255, 244, 244, 244),
         border: Border.all(color: Colors.grey),
       ),
       child: const Row(

@@ -8,10 +8,7 @@ class NewItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Adicionar novo débito"),
-        backgroundColor: const Color(0xff146073),
-      ),
+      appBar: AppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
